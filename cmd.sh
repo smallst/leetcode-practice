@@ -1,1 +1,1 @@
-cat words.txt|sed -r "s/\s+/\n/g"|sed -r '/^$/d'|sort|uniq -c|sort -rn|awk '{print $2 " " $1}'
+cat file.txt |sed -n '10p'
