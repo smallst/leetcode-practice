@@ -1,52 +1,24 @@
 class Solution {
 public:
-    void reverseWords(string &s) {
-        int l = s.length();
-        for(int i = 0; i <l/2; i++)
+    vector<int> twoSum(vector<int>& nums, int target) {
+        vector<int> pair, ret;
+        map<int, int> mp;
+        int i = 0;
+        for(auto it = nums.begin(); it != nums.end(); it++, i++)
         {
-            char temp = s[i];
-            s[i] = s[l-1-i];
-            s[l-1-i] = temp;
+            mp[*it] = i;
+            pair.push_back(target-(*it));   
         }
-        int st = 0;
-        for(int i = 0; i !=l; i++)
+        i = 0;
+        for(auto it = pair.begin(); it != pair.end(); it++, i++)
         {
-            if(s[i] == ' ')
+            if(mp.find(*it) != mp.end() && i != mp[*it])
             {
-                for(int j = st; j < (i+st)/2; j++)
-                {
-                    char temp = s[j];
-                    s[j] = s[i-1-(j-st)];
-                    s[i-1-(j-st)] = temp;
-                }
-                st = i+1;
+                ret.push_back(i);
+                ret.push_back(mp[*it]);
+                break;
             }
         }
-        for(int j = st; j < (l+st)/2; j++)
-        {
-            char temp = s[j];
-            s[j] = s[l-1-(j-st)];
-            s[l-1-(j-st)] = temp;
-        }
-        while(s[0] == ' ')
-        {
-            s = s.substr(1,s.length());
-        }
-        l = s.length();
-        while(s[l-1] == ' ')
-        {
-            s= s.substr(0,l -1);
-            l --;
-        }
-        l = s.length();
-        for(int i = 1; i <l; i++)
-        {
-            if(s[i] == ' ' && s[i-1] == ' ')
-            {
-                s.erase(i, 1);
-                i -- ;
-                l --;
-            }
-        }
+        return ret;
     }
 };
