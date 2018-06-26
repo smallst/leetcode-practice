@@ -1,9 +1,1 @@
-awk '{
-for(i=1;i<=NF;i++){
-if(NR==1)
-s[i]=$i;
-else
-s[i]=s[i]" "$i;
-}}END{for(i=1;i<=NF;i++)
-print s[i];
-}' file.txt
+cat words.txt|sed -r "s/\s+/\n/g"|sed -r '/^$/d'|sort|uniq -c|sort -rn|awk '{print $2 " " $1}'
