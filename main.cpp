@@ -1,24 +1,28 @@
 class Solution {
 public:
-    vector<int> twoSum(vector<int>& nums, int target) {
-        vector<int> pair, ret;
-        map<int, int> mp;
-        int i = 0;
-        for(auto it = nums.begin(); it != nums.end(); it++, i++)
-        {
-            mp[*it] = i;
-            pair.push_back(target-(*it));   
-        }
-        i = 0;
-        for(auto it = pair.begin(); it != pair.end(); it++, i++)
-        {
-            if(mp.find(*it) != mp.end() && i != mp[*it])
+    int * res = NULL;
+    int numSquares(int n) {
+        int s = sqrt(n);
+        if(s*s == n) return 1;
+        if(res == NULL){
+            res = new int [n + 1];
+            for(int i =0 ;i <= n;  i++)
             {
-                ret.push_back(i);
-                ret.push_back(mp[*it]);
-                break;
+                res[i] = -1;
             }
         }
-        return ret;
+        if(res[n]  != -1)
+        {
+            return res[n];
+        }
+        int min = INT_MAX;
+ 
+        for (int i =s; i > 0; --i) {
+            int a = 1 + numSquares(n - i*i);
+            min = a < min ? a : min;
+        }
+        res[n] = min;
+        return min;
     }
 };
+;
