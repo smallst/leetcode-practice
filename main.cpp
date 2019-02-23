@@ -1,28 +1,41 @@
 class Solution {
 public:
-    int * res = NULL;
-    int numSquares(int n) {
-        int s = sqrt(n);
-        if(s*s == n) return 1;
-        if(res == NULL){
-            res = new int [n + 1];
-            for(int i =0 ;i <= n;  i++)
-            {
-                res[i] = -1;
-            }
-        }
-        if(res[n]  != -1)
+    bool isValid(string s) {
+        std::stack<char> st;
+        bool valid = true;
+        for(int i = 0; valid && i< s.length(); i++)
         {
-            return res[n];
+            switch(s[i])
+            {
+                case '(': 
+                case '[': 
+                case '{': st.push(s[i]); break;
+                case ')': if(st.empty() || st.top() != '(') {
+                    valid = false;
+                    break;
+                }
+                    else st.pop();
+                    break;
+                          case ']':if(st.empty() || st.top() != '[') {
+
+                    valid = false;
+                    break;
+                }
+                    else st.pop();
+                    break;
+                            case '}': if(st.empty() || st.top() != '{') {
+
+                    valid = false;
+                    break;
+                }
+                    else st.pop();
+                    break;
+            }
+       
         }
-        int min = INT_MAX;
- 
-        for (int i =s; i > 0; --i) {
-            int a = 1 + numSquares(n - i*i);
-            min = a < min ? a : min;
-        }
-        res[n] = min;
-        return min;
+                if(!st.empty())
+        valid = false;
+
+        return valid;
     }
 };
-;
