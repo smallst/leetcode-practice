@@ -1,27 +1,23 @@
 class Solution {
 public:
-    bool isValidSerialization(string preorder) {
-        int count = 0;
-        int l = preorder.length();
-        if(preorder[l-1] != '#')
-            return false;
-        for(int i = 0; i< l-1; i++)
+    int minPatches(vector<int>& nums, int n) {
+        long miss = 1;
+        int patch = 0;
+        auto i = nums.begin();
+        while(miss <= n)
         {
-            if(preorder[i] == '#')
-            {
-                count --;
-                if(i<l-1){i++;}
-            }
+                if(i >= nums.end() || miss < (*i))
+                {
+                    patch ++;
+                    miss += miss;
+                }
                 else
                 {
-                    count ++;
-                    while(i<l-1&&preorder[++i] !=',');
+                    miss += (*i);
+                        i++;
                 }
-            if(count < 0 )
-                return false;
+            
         }
-        if(count == 0)
-            return true;
-        return false;
+        return patch;
     }
 };
