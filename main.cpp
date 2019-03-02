@@ -1,67 +1,44 @@
-class Trie {
+class Solution {
 public:
-    Trie **child;
-    bool finish;
-    /** Initialize your data structure here. */
-    Trie() {
-        child = new Trie* [26];
-        for(int i =0; i< 26; i++)
+
+int Y, X;
+    int numIslands(vector<vector<char>>& grid) {
+        Y = grid.size();
+        if(Y == 0)
+            return 0;
+        X = grid[0].size();
+        if(X == 0)
+            return 0;
+        int start =0;
+        for(int i =0;i < Y;i++)
         {
-            child[i] = NULL;
-        }
-        finish = false;
-    }
-    
-    /** Inserts a word into the trie. */
-    void insert(string word) {
-        Trie* root = this;
-        for(int i = 0; i< word.length(); i++)
-        {
-            int index = word[i] - 'a';
-            if(root->child[index] == NULL)
-                root->child[index] = new Trie();
-            root = root->child[index];
-        }
-        root->finish = true;
-    }
-    
-    /** Returns if the word is in the trie. */
-    bool search(string word) {
-        Trie* root = this;
-        for(int i =0 ;i < word.length(); i++)
-        {
-            int index = word[i] - 'a';
-            if(root->child[index] == NULL)
-                return false;
-            else
+            for(int j = 0; j < X; j++)
             {
-                root = root -> child[index];
+                if(grid[i][j] == '1')
+                {
+                    deepSearch(grid, i, j);
+                    start ++;
+                }
             }
         }
-        return root->finish;
+        return start ;
     }
-    
-    /** Returns if there is any word in the trie that starts with the given prefix. */
-    bool startsWith(string prefix) {
-        Trie* root = this;
-        for(int i =0 ;i < prefix.length(); i++)
-        {
-            int index = prefix[i] - 'a';
-            if(root->child[index] == NULL)
-                return false;
-            else
-            {
-                root = root -> child[index];
-            }
-        }
+    bool valid(int i, int j)
+    {
+        if(i < 0  || j < 0 || i >= Y || j >= X)
+            return false;
         return true;
     }
+    void deepSearch(vector<vector<char>>& grid,  int x, int y)
+    {
+         if(!valid(x,y))
+           return;
+         if(grid[x][y] != '1')
+         return;
+        grid[x][y] = '$';
+        deepSearch(grid,  x+1, y);
+        deepSearch(grid,  x, y-1);
+        deepSearch(grid,  x, y+1);
+        deepSearch(grid,  x-1, y);
+    }
 };
-
-/**
- * Your Trie object will be instantiated and called as such:
- * Trie obj = new Trie();
- * obj.insert(word);
- * bool param_2 = obj.search(word);
- * bool param_3 = obj.startsWith(prefix);
- */
