@@ -1,34 +1,27 @@
 class Solution {
 public:
-    int hIndex(vector<int>& citations) {
-        int low = 0, high = citations.size();
-        int length = high;
-        while(low < high )
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        int Y = 0, X = 0;
+        if(matrix.size() > 0)
         {
-               int mid = (low + high) / 2;
-            if(mid == 0)
-            {
-                return citations[0] == 0? 0 : 1;
-            }
-            nth_element(citations.begin(), citations.begin() + length -1 - mid, citations.end());
-            int midValue = *(citations.begin() + length - mid -1);
-            nth_element(citations.begin(), citations.begin() + length - mid, citations.end());
-            int nextValue = *(citations.begin() + length - mid );
-            if(midValue <= mid && nextValue >= mid)
-            {
-                low = mid;
-                break;
-            }
-            else if(midValue > mid)
-            {
-                low = mid+1;
-            }
-            else if(nextValue < mid)
-            {
-                high = mid;
-            }
-
+            X = matrix[0].size();
+            X --;
         }
-        return low;
+        while(Y + 1 <= matrix.size() && X >= 0)
+        {
+            if( target == matrix[Y][X])
+            {
+                return true;
+            }
+            else if(target < matrix[Y][X])
+            {
+                X --;
+            }
+            else
+            {
+                Y ++;
+            }
+        }
+        return false;
     }
 };
