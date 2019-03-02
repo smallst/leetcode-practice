@@ -1,46 +1,34 @@
-// Below is the interface for Iterator, which is already defined for you.
-// **DO NOT** modify the interface for Iterator.
-class Iterator {
-    struct Data;
-	Data* data;
+class Solution {
 public:
-	Iterator(const vector<int>& nums);
-	Iterator(const Iterator& iter);
-	virtual ~Iterator();
-	// Returns the next element in the iteration.
-	int next();
-	// Returns true if the iteration has more elements.
-	bool hasNext() const;
-};
+    int hIndex(vector<int>& citations) {
+        int low = 0, high = citations.size();
+        int length = high;
+        while(low < high )
+        {
+               int mid = (low + high) / 2;
+            if(mid == 0)
+            {
+                return citations[0] == 0? 0 : 1;
+            }
+            nth_element(citations.begin(), citations.begin() + length -1 - mid, citations.end());
+            int midValue = *(citations.begin() + length - mid -1);
+            nth_element(citations.begin(), citations.begin() + length - mid, citations.end());
+            int nextValue = *(citations.begin() + length - mid );
+            if(midValue <= mid && nextValue >= mid)
+            {
+                low = mid;
+                break;
+            }
+            else if(midValue > mid)
+            {
+                low = mid+1;
+            }
+            else if(nextValue < mid)
+            {
+                high = mid;
+            }
 
-
-class PeekingIterator : public Iterator {
-public:
-    bool isHasNext;
-    int nextValue;
-	PeekingIterator(const vector<int>& nums) : Iterator(nums) {
-	    // Initialize any member here.
-	    // **DO NOT** save a copy of nums and manipulate it directly.
-	    // You should only use the Iterator interface methods.
-	    isHasNext = Iterator::hasNext();
-        if(isHasNext) nextValue = Iterator::next();
-	}
-
-    // Returns the next element in the iteration without advancing the iterator.
-	int peek() {
-        return nextValue;
-	}
-
-	// hasNext() and next() should behave the same as in the Iterator interface.
-	// Override them if needed.
-	int next() {
-	    isHasNext = Iterator::hasNext();
-        int value = nextValue;
-        if(isHasNext) nextValue = Iterator::next();
-        return value;
-	}
-
-	bool hasNext() const {
-	    return isHasNext;
-	}
+        }
+        return low;
+    }
 };
