@@ -1,27 +1,30 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
 class Solution {
 public:
-    bool searchMatrix(vector<vector<int>>& matrix, int target) {
-        int Y = 0, X = 0;
-        if(matrix.size() > 0)
+    int kthSmallest(TreeNode* root, int k) {
+        int l = countNodes(root->left);
+        if(l + 1 == k)
+            return root->val;
+        else if(l + 1< k)
+            return kthSmallest(root->right, k-l-1);
+        else
+            return kthSmallest(root->left, k);
+    }
+    
+    int countNodes(TreeNode* root)
+    {
+        if(root == NULL)
         {
-            X = matrix[0].size();
-            X --;
+            return 0;
         }
-        while(Y + 1 <= matrix.size() && X >= 0)
-        {
-            if( target == matrix[Y][X])
-            {
-                return true;
-            }
-            else if(target < matrix[Y][X])
-            {
-                X --;
-            }
-            else
-            {
-                Y ++;
-            }
-        }
-        return false;
+        return countNodes(root->left) + 1 + countNodes(root->right);
     }
 };
