@@ -1,23 +1,29 @@
 class Solution {
 public:
-    int minPatches(vector<int>& nums, int n) {
-        long miss = 1;
-        int patch = 0;
-        auto i = nums.begin();
-        while(miss <= n)
+    int maxProduct(vector<string>& words) {
+        vector<int> wm;
+        for(auto i = words.begin(); i != words.end(); i++)
         {
-                if(i >= nums.end() || miss < (*i))
-                {
-                    patch ++;
-                    miss += miss;
-                }
-                else
-                {
-                    miss += (*i);
-                        i++;
-                }
-            
+            int x = 0;
+            for(auto c = 0; c < (*i).length(); c++)
+            {
+                x |= 1<<((*i)[c] - 'a');
+            }
+            wm.push_back(x);
         }
-        return patch;
+        int l = wm.size();
+        int max = 0;
+        for(int i = 0; i < l; i++)
+        {
+            for(int j = i+1; j < l; j++)
+            {
+                if(!(wm[i] & wm[j]))
+                {
+                    int length = words[i].length() * words[j].length();
+                    max = max > length ? max : length;
+                }
+            }
+        }
+        return max;
     }
 };
