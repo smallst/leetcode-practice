@@ -1,29 +1,30 @@
 class Solution {
 public:
-    int maxProduct(vector<string>& words) {
-        vector<int> wm;
-        for(auto i = words.begin(); i != words.end(); i++)
+    int nthSuperUglyNumber(int n, vector<int>& primes) {
+        vector<int> ugly = {1};
+        int *times = new int [primes.size()];
+        for (int i = 0;i < primes.size(); i++)
         {
-            int x = 0;
-            for(auto c = 0; c < (*i).length(); c++)
-            {
-                x |= 1<<((*i)[c] - 'a');
-            }
-            wm.push_back(x);
+            times[i] =0;
         }
-        int l = wm.size();
-        int max = 0;
-        for(int i = 0; i < l; i++)
+        for(int k = 1;k < n; k++)
         {
-            for(int j = i+1; j < l; j++)
-            {
-                if(!(wm[i] & wm[j]))
+            int min = INT_MAX;
+            for(auto i = 0; i!= primes.size(); i++)
+            {   
+                int temp = (primes[i]) * ugly[times[i]];
+                min = min < temp ? min : temp;
+            }   
+            ugly.push_back(min);
+            for(auto i = 0; i!= primes.size(); i++)
+            {   
+                int temp = (primes[i]) * ugly[times[i]];
+                if(temp == min )
                 {
-                    int length = words[i].length() * words[j].length();
-                    max = max > length ? max : length;
+                    times[i] ++;
                 }
-            }
+            }   
         }
-        return max;
+        return ugly[n-1];
     }
 };
