@@ -1,30 +1,61 @@
 class Solution {
 public:
-    int nthSuperUglyNumber(int n, vector<int>& primes) {
-        vector<int> ugly = {1};
-        int *times = new int [primes.size()];
-        for (int i = 0;i < primes.size(); i++)
+    vector<int> findMinHeightTrees(int n, vector<pair<int, int>>& edges) {
+        vector<int> res;
+        if(n <=2)
         {
-            times[i] =0;
+            for(int i = 0;i < n ; i++)
+            {
+                res.push_back(i);
+            }
+            return res;
         }
-        for(int k = 1;k < n; k++)
+        vector<unordered_set<int>> graph(n);
+        int *node = new int [n];
+        for(int i = 0;i < n; i++)
         {
-            int min = INT_MAX;
-            for(auto i = 0; i!= primes.size(); i++)
-            {   
-                int temp = (primes[i]) * ugly[times[i]];
-                min = min < temp ? min : temp;
-            }   
-            ugly.push_back(min);
-            for(auto i = 0; i!= primes.size(); i++)
-            {   
-                int temp = (primes[i]) * ugly[times[i]];
-                if(temp == min )
+            node[i] = 0;
+        }
+        for(auto i = edges.begin(); i != edges.end(); i++)
+        {
+            node[(*i).first] ++;
+            node[(*i).second] ++;
+            graph[(*i).first].insert((*i).second);
+            graph[(*i).second].insert((*i).first);
+        }
+        queue<int> lis;
+        for(int i=0; i< n; i++)
+        {
+            if(node[i] == 1)
+            {
+                lis.push(i);
+            }
+        }
+        while(n > 2)
+        {
+            int l = lis.size();
+            n = n - l;
+            for(int ii = 0; ii < l; ii ++)
+            {
+                int i = lis.front();
+            auto it = graph[i].begin(); 
+                    node[*it] --; 
+                graph[*it].erase(i);
+                if(node[*it] == 1)
                 {
-                    times[i] ++;
+                    lis.push(*it);
                 }
-            }   
+            node[i] = 0;
+            lis.pop();
+            }
         }
-        return ugly[n-1];
+        
+       while(!lis.empty())
+       {
+           res.push_back(lis.front());
+           lis.pop();
+       }
+            
+        return res;
     }
 };
