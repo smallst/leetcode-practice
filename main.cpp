@@ -1,30 +1,67 @@
-class Solution {
+class Trie {
 public:
-    vector<string> summaryRanges(vector<int>& nums) {
-        int l = nums.size();
-        
-        vector<string> res;
-        if(l == 0)
-            return res;
-        int start = 0;
-        for(int i = 0; i<l-1; i++)
+    Trie **child;
+    bool finish;
+    /** Initialize your data structure here. */
+    Trie() {
+        child = new Trie* [26];
+        for(int i =0; i< 26; i++)
         {
-            if(nums[i] +1 < nums[i+1])    
+            child[i] = NULL;
+        }
+        finish = false;
+    }
+    
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        Trie* root = this;
+        for(int i = 0; i< word.length(); i++)
+        {
+            int index = word[i] - 'a';
+            if(root->child[index] == NULL)
+                root->child[index] = new Trie();
+            root = root->child[index];
+        }
+        root->finish = true;
+    }
+    
+    /** Returns if the word is in the trie. */
+    bool search(string word) {
+        Trie* root = this;
+        for(int i =0 ;i < word.length(); i++)
+        {
+            int index = word[i] - 'a';
+            if(root->child[index] == NULL)
+                return false;
+            else
             {
-                if(i > start )
-                res.push_back(to_string(nums[start]) + "->" + to_string(nums[i]));    
-                else
-                res.push_back(to_string(nums[start]));    
-                
-                start = i + 1;
+                root = root -> child[index];
             }
         }
-        if(start != l -1)
-                res.push_back(to_string(nums[start]) + "->" + to_string(nums[l-1]));    
-                else
-                res.push_back(to_string(nums[start]));    
-    
-            return res;
+        return root->finish;
     }
-   
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool startsWith(string prefix) {
+        Trie* root = this;
+        for(int i =0 ;i < prefix.length(); i++)
+        {
+            int index = prefix[i] - 'a';
+            if(root->child[index] == NULL)
+                return false;
+            else
+            {
+                root = root -> child[index];
+            }
+        }
+        return true;
+    }
 };
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie obj = new Trie();
+ * obj.insert(word);
+ * bool param_2 = obj.search(word);
+ * bool param_3 = obj.startsWith(prefix);
+ */
