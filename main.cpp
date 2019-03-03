@@ -1,26 +1,34 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> neighbors;
+
+    Node() {}
+
+    Node(int _val, vector<Node*> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+*/
 class Solution {
 public:
-    bool wordBreak(string s, vector<string>& wordDict) {
-        int l = s.length();
+    unordered_map<Node*, Node*> copyed;
+    Node* cloneGraph(Node* node) {
+        if(node == NULL)
+            return NULL;
         
-        vector<bool> dp(l+1, false);
-        dp[0] = true;
         
-        for(int i = 1; i<= l; i++)
+        if(copyed.find(node) == copyed.end())
         {
-            for(int j = i-1; j >=0 ;j --)
+            copyed[node] = new Node(node->val, {});
+            for(auto i = node->neighbors.begin(); i != node->neighbors.end(); i++)
             {
-                if(dp[j])
-                {
-                    string t = s.substr(j, i-j);
-                    if(find(wordDict.begin(), wordDict.end(), t) != wordDict.end())
-                    {
-                        dp[i] = true;
-                        break;
-                    }
-                }
+                copyed[node]->neighbors.push_back(cloneGraph(*i));
             }
         }
-        return dp[l];
+        return copyed[node];
     }
 };
