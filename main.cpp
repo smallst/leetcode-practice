@@ -1,44 +1,50 @@
-class Solution {
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class BSTIterator {
+    private:
+    stack<TreeNode*> st;
 public:
-
-int Y, X;
-    int numIslands(vector<vector<char>>& grid) {
-        Y = grid.size();
-        if(Y == 0)
-            return 0;
-        X = grid[0].size();
-        if(X == 0)
-            return 0;
-        int start =0;
-        for(int i =0;i < Y;i++)
+    void findLeft(TreeNode* root)
+    {
+        TreeNode * temp = root;
+        while(temp!=NULL)
         {
-            for(int j = 0; j < X; j++)
-            {
-                if(grid[i][j] == '1')
-                {
-                    deepSearch(grid, i, j);
-                    start ++;
-                }
-            }
+            st.push(temp);
+            temp = temp->left;
         }
-        return start ;
     }
-    bool valid(int i, int j)
-    {
-        if(i < 0  || j < 0 || i >= Y || j >= X)
-            return false;
-        return true;
+    BSTIterator(TreeNode* root) {
+        findLeft(root);
     }
-    void deepSearch(vector<vector<char>>& grid,  int x, int y)
-    {
-         if(!valid(x,y))
-           return;
-         if(grid[x][y] != '1')
-         return;
-        grid[x][y] = '$';
-        deepSearch(grid,  x+1, y);
-        deepSearch(grid,  x, y-1);
-        deepSearch(grid,  x, y+1);
-        deepSearch(grid,  x-1, y);
+    
+    /** @return the next smallest number */
+    int next() {
+        TreeNode * head = st.top();
+        int val = head->val;
+        st.pop();
+        if(head->right)
+        {
+            findLeft(head->right);
+        }
+        return val;
+    }
+    
+    /** @return whether we have a next smallest number */
+    bool hasNext() {
+        return !st.empty();
     }
 };
+
+/**
+ * Your BSTIterator object will be instantiated and called as such:
+ * BSTIterator* obj = new BSTIterator(root);
+ * int param_1 = obj->next();
+ * bool param_2 = obj->hasNext();
+ */
