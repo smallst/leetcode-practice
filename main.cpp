@@ -1,34 +1,26 @@
 class Solution {
 public:
-    int findPeakElement(vector<int>& nums) {
-        int left = 0, right = nums.size();
-        while(left + 1 < right)
+    bool wordBreak(string s, vector<string>& wordDict) {
+        int l = s.length();
+        
+        vector<bool> dp(l+1, false);
+        dp[0] = true;
+        
+        for(int i = 1; i<= l; i++)
         {
-            int mid = (left + right) / 2;
-            if(mid == 0 && nums[mid] > nums[mid+1])
+            for(int j = i-1; j >=0 ;j --)
             {
-                return 0;
-            }
-            if(mid + 1 == nums.size())
-                if(nums[mid] > nums[mid-1])
-                return mid;
-            else{
-                right = mid;
-                continue;
-            }
-            if(nums[mid] > nums[mid-1])
-            {
-                if( nums[mid] > nums[mid+1])
-                return mid;
-                else
+                if(dp[j])
                 {
-                    left = mid;
+                    string t = s.substr(j, i-j);
+                    if(find(wordDict.begin(), wordDict.end(), t) != wordDict.end())
+                    {
+                        dp[i] = true;
+                        break;
+                    }
                 }
             }
-            else{
-                right = mid;
-            }
         }
-        return left;
+        return dp[l];
     }
 };
