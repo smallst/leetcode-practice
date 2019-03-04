@@ -1,45 +1,23 @@
 class Solution {
 public:
-    void nextPermutation(vector<int>& nums) {
-        int l = nums.size(), i;
-        for(i = l - 1; i > 0; i--)
-        {
-            if(nums[i] > nums[i-1])
-            {
-                break;
-            }
-        }
-        if(i==0)
-        {
-            reverse(nums, 0, l-1);
-            return;
-        }
-        i--;
-        for(int j = l-1; j>i;j--)
-        {
-            if(nums[i] < nums[j])
-            {
-                swap(nums, i, j);
-                reverse(nums, i+1, l-1);
-                return;
-            }
-        }
-    }
-    void swap(vector<int> & nums, int a, int b)
+   
+    void generateTail(vector<string>& v, string s, int n, int m){
+    if(n == 0 && m == 0)
     {
-        if(a >= b)
-            return;
-        nums[a] = nums[a] + nums[b];
-        nums[b] = nums[a] - nums[b];
-        nums[a] = nums[a] - nums[b];
+        v.push_back(s);
+        return;
     }
-    void reverse(vector<int> & nums, int s, int e)
-    {
-        if(s >= e)
-            return;
-        for(int i =s; i <= (s+e)/2; i++)
-        {
-            swap(nums, i, s+e-i);
-        }
-    }
+    if(m > 0) generateTail(v, s+")", n, m-1);
+    if(n > 0) generateTail(v, s+"(", n-1, m+1);
+}
+vector<string> generateParenthesis(int n) {
+    std::vector<string> res;
+    if(n == 0)
+    return res;
+    generateTail(res, "", n, 0);
+    return res;
+}
+
+
+
 };
