@@ -1,34 +1,49 @@
-/*
-// Definition for a Node.
-class Node {
-public:
-    int val;
-    vector<Node*> neighbors;
-
-    Node() {}
-
-    Node(int _val, vector<Node*> _neighbors) {
-        val = _val;
-        neighbors = _neighbors;
-    }
-};
-*/
 class Solution {
 public:
-    unordered_map<Node*, Node*> copyed;
-    Node* cloneGraph(Node* node) {
-        if(node == NULL)
-            return NULL;
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int> res;
+        int y = matrix.size();
+        if(y == 0)
+            return res;
+        int x = matrix[0].size();
+        if(x == 0)
+            return res;
         
-        
-        if(copyed.find(node) == copyed.end())
+        int w = x, h = y, sw = 0, sh = 0;
+        while(true)
         {
-            copyed[node] = new Node(node->val, {});
-            for(auto i = node->neighbors.begin(); i != node->neighbors.end(); i++)
+            for(int i = sw; i < w;i ++)
             {
-                copyed[node]->neighbors.push_back(cloneGraph(*i));
+                res.push_back(matrix[sh][i]);
             }
+            if(sw >= w)
+                break;
+            for(int i = sh+1; i < h; i++)
+            {
+                res.push_back(matrix[i][w-1]);
+            }
+            if(sh +1 >=h )
+            break;
+
+            for(int i = w-2; i >=sw; i--)
+            {
+                res.push_back(matrix[h-1][i]);
+            }
+            if(sw + 2 > w)
+            {
+                break;
+            }
+            for(int i = h-2; i>sh; i--)
+            {
+                res.push_back(matrix[i][sw]);
+            }
+            sh ++;
+            sw ++;
+            h--;
+            w --;
+            if(sh >=h)
+                break;
         }
-        return copyed[node];
+        return res;
     }
 };
